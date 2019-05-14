@@ -1,3 +1,7 @@
+# RMD files
+.rmd
+
+
 # History files
 .Rhistory
 .Rapp.history
