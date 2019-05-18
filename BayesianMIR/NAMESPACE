@@ -1,0 +1,11 @@
+useDynLib(BayesianMIR)
+importFrom(Rcpp, evalCpp)
+exportPattern("^[[:alpha:]]+")
+
+import(Matrix)
+import(Rcpp)
+import(coda)
+import(ggplot2)
+import(randomForest)
+import(reshape2)
+importClassesFrom(Matrix, dgCMatrix)
