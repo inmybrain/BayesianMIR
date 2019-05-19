@@ -3,7 +3,7 @@
 #' @name MIScatterPlot
 #' @title Scatter Plot for Multiple Instance Regression
 #' @description Visualize multiple instances and/or identification of primary instances.
-#' @param tidydata A list created from \code{\link{Tidydata}}.
+#' @param tidydata A list created from \code{\link{Tidy_dataset}}.
 #' @param bag_size Maximum size of bags to be plotted. This parameter is for reducing the object size.
 #' @param true_primary A list of logical vectors. Each logical vector denotes which instances are primary in a bag. In general, it is not available in real data.
 #' @param pred_primary A list of logical vectors. Each logical vector is a fitted or predicted outcome that indicates which instances are primary in a bag.
@@ -43,11 +43,12 @@
 #' BMIR_fit <- BMIR_sampler(ntotal = 1000, tidydata = tidydata)
 #'                          
 #' ## Visualize fitted results
+#' tp <- lapply(1:tidydata$nsample, function(x) rep(c(TRUE, FALSE), c(1, ninst - 1)))
+#' pp <- lapply(split(BMIR_fit$pip[,1], tidydata$membership), function(x) rank(-x, "min") <= 1)
 #' MIScatterPlot(tidydata = tidydata, 
 #'               bag_size = 5,
-#'               true_primary = lapply(1:tidydata$nsample, function(x) rep(c(TRUE, FALSE), c(1, ninst - 1))), 
-#'               pred_primary = lapply(split(BMIR_fit$pip[,1], tidydata$membership), function(x) rank(-x, ties.method = "min") <= 1)
-#' )
+#'               true_primary = tp, 
+#'               pred_primary = pp)
 #' @export
 MIScatterPlot <- function(tidydata, bag_size,
                           true_primary = NULL, pred_primary = NULL){

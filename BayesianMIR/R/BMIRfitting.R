@@ -3,17 +3,19 @@
 #' @name getHypara
 #' @title Generate hyperparameters
 #' @description Generate hyperparameters for the Monte Carlo Markov Chain sampling.
-#' @param tidydata A list created from \code{\link{Tidydata}}.
+#' @param tidydata A list created from \code{\link{Tidy_dataset}}.
 #' @return A list with components:
-#' \item{hp_mu_coef}{For an intercept, the sample mean of labels is given, while $0$ is given for the others.}
-#' \item{hp_a}{$=0.1$. Vague informative prior.}
-#' \item{hp_b}{$=0.1$. Vague informative prior.}
-#' \item{hp_g_coef}{$1/n$ where $n$ is the sample size. The unit information prior.}
-#' \item{hp_pi}{Uniform distribution over a bag. If a bag $i$ has $m_i$ instances, then the prior probability is $1/m_i$.}
+#' \item{hp_mu_coef}{For an intercept, the sample mean of labels is given, while \code{0} is given for the others.}
+#' \item{hp_a}{\code{=0.1}. Vague informative prior.}
+#' \item{hp_b}{\code{=0.1}. Vague informative prior.}
+#' \item{hp_g_coef}{\code{1/n} where \code{n} is the sample size. The unit information prior.}
+#' \item{hp_pi}{Uniform distribution over a bag. If a bag \code{i} has \code{m_i} instances, then the prior probability is \code{1/m_i}.}
 #' \item{hp_inv_Sig_coef}{Identity matrix.}
 #' \item{hp_sig2_y}{The sample variance of labels.}
 #' @examples
-#' getHypara(Tidy_dataset(label = rnorm(3), feature_inst = replicate(3, matrix(rnorm(10), 2), simplify = FALSE)))
+#' bags <- replicate(3, matrix(rnorm(10), 2), simplify = FALSE)
+#' tidydata <- Tidy_dataset(label = rnorm(3), feature_inst = bags)
+#' getHypara(tidydata)
 #' @export
 getHypara <- function(tidydata){
   res <- list(
@@ -34,11 +36,13 @@ getHypara <- function(tidydata){
 #' @description Generate initial values for parameters
 #' @param hypara A list created from \code{\link{getHypara}}.
 #' @return A list with components:
-#' \item{coef}{Random variables from MVN(\code{hypara$hp_mu_coef}, $10I$).}
+#' \item{coef}{Random variables from MVN(\code{hypara$hp_mu_coef}, \code{10I}).}
 #' \item{sig2_error}{Random variable from Gamma(\code{hypara$hp_a}, \code{hypara$hp_b}).}
-#' \item{delta}{Binary variables. Within a bag $i$, each random vector is generated from Multinomial(1, \code{hp_pi_list[[i]]}).}
+#' \item{delta}{Binary variables. Within a bag \code{i}, each random vector is generated from \code{rmultinom(1, hp_pi_list[[i]])}.}
 #' @examples
-#' getInit(getHypara(Tidy_dataset(label = rnorm(3), feature_inst = replicate(3, matrix(rnorm(10), 2), simplify = FALSE))))
+#' bags <- replicate(3, matrix(rnorm(10), 2), simplify = FALSE)
+#' tidydata <- Tidy_dataset(label = rnorm(3), feature_inst = bags)
+#' getInit(getHypara(tidydata))
 #' @export
 getInit <- function(hypara){
   list(
@@ -56,14 +60,14 @@ getInit <- function(hypara){
 #' @name getPar
 #' @title Generate all input parameters
 #' @description Generate all input parameters required in \code{\link{Run1Gibbs_cpp}}.
-#' @param tidydata A list created from \code{\link{Tidydata}}.
+#' @param tidydata A list created from \code{\link{Tidy_dataset}}.
 #' @return A list with components:
-#' \item{n}{\code{nsample} in \code{\link{Tidydata}}}
-#' \item{p}{\code{nfeature} in \code{\link{Tidydata}}}
-#' \item{ninst}{\code{ninst} in \code{\link{Tidydata}}}
+#' \item{n}{\code{nsample} in \code{\link{Tidy_dataset}}}
+#' \item{p}{\code{nfeature} in \code{\link{Tidy_dataset}}}
+#' \item{ninst}{\code{ninst} in \code{\link{Tidy_dataset}}}
 #' \item{m}{Total number of instances}
-#' \item{membership}{{\code{membership} in \code{\link{Tidydata}}}}
-#' \item{Y}{{\code{label} in \code{\link{Tidydata}}}}
+#' \item{membership}{{\code{membership} in \code{\link{Tidy_dataset}}}}
+#' \item{Y}{{\code{label} in \code{\link{Tidy_dataset}}}}
 #' \item{X1}{Covariate matrix of all instances.}
 #' \item{hp_sig2_y}{Same as in \code{\link{getHypara}}}
 #' \item{hp_mu_coef}{Same as in \code{\link{getHypara}}}
@@ -109,11 +113,11 @@ getPar <- function(tidydata){
 #' @name BMIR_sampler
 #' @title The Bayesian Muliple Instance Regression model
 #' @description Generate the Monte Carlo Markov Chain samples from the specified Bayesian model.
-#' @param ntotal Total number of samplings. Default is $100000$.
-#' @param nwarm Number of iterations used in burn-in steps. Default is \code{ntotal} / 2.
-#' @param nthin The thinning interval. Default is $1$.
+#' @param ntotal Total number of samplings. Default is \code{100000}.
+#' @param nwarm Number of iterations used in burn-in steps. Default is \code{ntotal / 2}.
+#' @param nthin The thinning interval. Default is \code{1}.
 #' @param nchain The number of the Markov chains. Default is $1$.
-#' @param tidydata A list created from \code{\link{Tidydata}}.
+#' @param tidydata A list created from \code{\link{Tidy_dataset}}.
 #' @param return_delta Logical. Whether to return binary indicators.
 #' @return A list with components:
 #' \item{mcmclist}{A list of class \code{mcmc} from \code{coda}.}

@@ -5,9 +5,9 @@
 #' @description Predict primary instances and labels in new samples (bags).
 #' @param BMIRchain One of the Markov chains \code{mcmclist} from \code{\link{BMIR_sampler}}.
 #' @param pip One of columns of \code{pip} from \code{\link{BMIR_sampler}}.
-#' @param tidydata A list created from \code{\link{Tidydata}} used in model training.
-#' @param newtidydata A list created from \code{\link{Tidydata}} only using \code{feature_inst}.
-#' @param k Numeric. The number of primary instances in each bag. Default is $1$.
+#' @param tidydata A list created from \code{\link{Tidy_dataset}} used in model training.
+#' @param newtidydata A list created from \code{\link{Tidy_dataset}} only using \code{feature_inst}.
+#' @param k Numeric. The number of primary instances in each bag. Default is \code{1}.
 #' @return A list with components:
 #' \item{newtidydata}{\code{newtidydata} appended with predicted labels (in \code{label}), predicted posterior inclusion probability (in \code{predpip}), and  predicted binary indicators (in \code{predind})}.
 #' @import randomForest

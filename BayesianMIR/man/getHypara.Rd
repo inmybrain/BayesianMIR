@@ -7,15 +7,15 @@
 getHypara(tidydata)
 }
 \arguments{
-\item{tidydata}{A list created from \code{\link{Tidydata}}.}
+\item{tidydata}{A list created from \code{\link{Tidy_dataset}}.}
 }
 \value{
 A list with components:
-\item{hp_mu_coef}{For an intercept, the sample mean of labels is given, while $0$ is given for the others.}
-\item{hp_a}{$=0.1$. Vague informative prior.}
-\item{hp_b}{$=0.1$. Vague informative prior.}
-\item{hp_g_coef}{$1/n$ where $n$ is the sample size. The unit information prior.}
-\item{hp_pi}{Uniform distribution over a bag. If a bag $i$ has $m_i$ instances, then the prior probability is $1/m_i$.}
+\item{hp_mu_coef}{For an intercept, the sample mean of labels is given, while \code{0} is given for the others.}
+\item{hp_a}{\code{=0.1}. Vague informative prior.}
+\item{hp_b}{\code{=0.1}. Vague informative prior.}
+\item{hp_g_coef}{\code{1/n} where \code{n} is the sample size. The unit information prior.}
+\item{hp_pi}{Uniform distribution over a bag. If a bag \code{i} has \code{m_i} instances, then the prior probability is \code{1/m_i}.}
 \item{hp_inv_Sig_coef}{Identity matrix.}
 \item{hp_sig2_y}{The sample variance of labels.}
 }
@@ -23,5 +23,7 @@ A list with components:
 Generate hyperparameters for the Monte Carlo Markov Chain sampling.
 }
 \examples{
-getHypara(Tidy_dataset(label = rnorm(3), feature_inst = replicate(3, matrix(rnorm(10), 2), simplify = FALSE)))
+bags <- replicate(3, matrix(rnorm(10), 2), simplify = FALSE)
+tidydata <- Tidy_dataset(label = rnorm(3), feature_inst = bags)
+getHypara(tidydata)
 }

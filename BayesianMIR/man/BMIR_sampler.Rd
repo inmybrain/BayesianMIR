@@ -8,15 +8,15 @@ BMIR_sampler(ntotal = 1e+05, nwarm = ntotal/2, nthin = 1,
   nchain = 1, tidydata, return_delta = FALSE)
 }
 \arguments{
-\item{ntotal}{Total number of samplings. Default is $100000$.}
+\item{ntotal}{Total number of samplings. Default is \code{100000}.}
 
-\item{nwarm}{Number of iterations used in burn-in steps. Default is \code{ntotal} / 2.}
+\item{nwarm}{Number of iterations used in burn-in steps. Default is \code{ntotal / 2}.}
 
-\item{nthin}{The thinning interval. Default is $1$.}
+\item{nthin}{The thinning interval. Default is \code{1}.}
 
 \item{nchain}{The number of the Markov chains. Default is $1$.}
 
-\item{tidydata}{A list created from \code{\link{Tidydata}}.}
+\item{tidydata}{A list created from \code{\link{Tidy_dataset}}.}
 
 \item{return_delta}{Logical. Whether to return binary indicators.}
 }

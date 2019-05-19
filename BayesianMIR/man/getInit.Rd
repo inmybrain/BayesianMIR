@@ -11,13 +11,15 @@ getInit(hypara)
 }
 \value{
 A list with components:
-\item{coef}{Random variables from MVN(\code{hypara$hp_mu_coef}, $10I$).}
+\item{coef}{Random variables from MVN(\code{hypara$hp_mu_coef}, \code{10I}).}
 \item{sig2_error}{Random variable from Gamma(\code{hypara$hp_a}, \code{hypara$hp_b}).}
-\item{delta}{Binary variables. Within a bag $i$, each random vector is generated from Multinomial(1, \code{hp_pi_list[[i]]}).}
+\item{delta}{Binary variables. Within a bag \code{i}, each random vector is generated from \code{rmultinom(1, hp_pi_list[[i]])}.}
 }
 \description{
 Generate initial values for parameters
 }
 \examples{
-getInit(getHypara(Tidy_dataset(label = rnorm(3), feature_inst = replicate(3, matrix(rnorm(10), 2), simplify = FALSE))))
+bags <- replicate(3, matrix(rnorm(10), 2), simplify = FALSE)
+tidydata <- Tidy_dataset(label = rnorm(3), feature_inst = bags)
+getInit(getHypara(tidydata))
 }

@@ -7,16 +7,16 @@
 getPar(tidydata)
 }
 \arguments{
-\item{tidydata}{A list created from \code{\link{Tidydata}}.}
+\item{tidydata}{A list created from \code{\link{Tidy_dataset}}.}
 }
 \value{
 A list with components:
-\item{n}{\code{nsample} in \code{\link{Tidydata}}}
-\item{p}{\code{nfeature} in \code{\link{Tidydata}}}
-\item{ninst}{\code{ninst} in \code{\link{Tidydata}}}
+\item{n}{\code{nsample} in \code{\link{Tidy_dataset}}}
+\item{p}{\code{nfeature} in \code{\link{Tidy_dataset}}}
+\item{ninst}{\code{ninst} in \code{\link{Tidy_dataset}}}
 \item{m}{Total number of instances}
-\item{membership}{{\code{membership} in \code{\link{Tidydata}}}}
-\item{Y}{{\code{label} in \code{\link{Tidydata}}}}
+\item{membership}{{\code{membership} in \code{\link{Tidy_dataset}}}}
+\item{Y}{{\code{label} in \code{\link{Tidy_dataset}}}}
 \item{X1}{Covariate matrix of all instances.}
 \item{hp_sig2_y}{Same as in \code{\link{getHypara}}}
 \item{hp_mu_coef}{Same as in \code{\link{getHypara}}}

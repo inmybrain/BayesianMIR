@@ -11,11 +11,11 @@
 
 \item{pip}{One of columns of \code{pip} from \code{\link{BMIR_sampler}}.}
 
-\item{tidydata}{A list created from \code{\link{Tidydata}} used in model training.}
+\item{tidydata}{A list created from \code{\link{Tidy_dataset}} used in model training.}
 
-\item{newtidydata}{A list created from \code{\link{Tidydata}} only using \code{feature_inst}.}
+\item{newtidydata}{A list created from \code{\link{Tidy_dataset}} only using \code{feature_inst}.}
 
-\item{k}{Numeric. The number of primary instances in each bag. Default is $1$.}
+\item{k}{Numeric. The number of primary instances in each bag. Default is \code{1}.}
 }
 \value{
 A list with components:
