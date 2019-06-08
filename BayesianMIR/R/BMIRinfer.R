@@ -58,10 +58,19 @@
 #'   ggplot2::geom_point() + ggplot2::geom_abline(intercept = 0, slope = 1, color = "red")
 #' @export
 predict.BMIR <- function(BMIRchain, pip, tidydata, newtidydata, k = 1){
+  # BMIRchain = res_BMIR$fit[[1]]$Result_1$mcsample
+  # pip = res_BMIR$fit[[1]]$Result_1$par$pip
+  # tidydata = tidydata_real
+  # newtidydata = tidy_LUAD
+  # k = 1
+  if(any(k > newtidydata$ninst)){
+    warning("k is larger than bag size of some bags.\nSuch bags will use all instances in prediction.\n")
+   # stop("Please choose smaller k (<= bag sizes).\n") 
+  }
   if(is.list(pip)){
     pip <- unlist(pip)
   }
-  pip <- logit(pip)
+  pip <- logit(pip - rep(1 / tidydata$ninst, tidydata$ninst))
   
   traindata <- data.frame(Reduce(rbind, tidydata$feature_inst),
                           membership = tidydata$membership,
@@ -70,7 +79,7 @@ predict.BMIR <- function(BMIRchain, pip, tidydata, newtidydata, k = 1){
   colnames(traindata) <- c(paste0("X", 1:tidydata$nfeature_inst), "membership", "pip")
   newdata <- data.frame(X = Reduce(rbind, newtidydata$feature_inst),
                         membership = newtidydata$membership,
-                        ninst = rep(1:newtidydata$nsample, newtidydata$ninst)
+                        ninst = rep(newtidydata$ninst, newtidydata$ninst)
   )
   colnames(newdata) <- c(paste0("X", 1:newtidydata$nfeature_inst), "membership", "ninst")
   
@@ -87,11 +96,15 @@ predict.BMIR <- function(BMIRchain, pip, tidydata, newtidydata, k = 1){
   
   
   ## Bag-level prediction
-  coef <- colMeans(BMIRchain)[paste0("coef", 1:(tidydata$nfeature + 1))]
+  coef <- colMeans(BMIRchain)[paste0("coef.", 1:(tidydata$nfeature + 1))]
   newtidydata$label <- unlist(Map(function(feature, id, pip){
     ypred <- coef[1] + as.matrix(feature[id,,drop = FALSE]) %*% coef[-1]
     return(sum(ypred * pip[id] / sum(pip[id])))
   }, newtidydata$feature_inst, newtidydata$predind, newtidydata$predpip))
+  # newtidydata$label <- unlist(Map(function(feature, id, pip){
+  #   ypred <- coef[1] + as.matrix(feature[id,,drop = FALSE]) %*% coef[-1]
+  #   return(sum(ypred * pip[id]))
+  # }, newtidydata$feature_inst, newtidydata$predind, newtidydata$predpip))
   
   res <- list(
     # tidydata = tidydata,

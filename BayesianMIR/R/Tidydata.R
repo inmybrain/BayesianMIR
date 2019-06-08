@@ -22,9 +22,9 @@
 #' @export
 Tidy_dataset <- function(label = NULL, feature_inst, membership = NULL){
   ## Transform a matrix or data frame input to a list  
-  if(is.list(feature_inst)){
+  if(class(feature_inst) == "list"){
     # okay
-  } else if(is.matrix(feature_inst) | is.data.frame(feature_inst)){
+  } else if(any(class(feature_inst) %in% c("data.frame", "matrix"))){
     if(is.null(membership)){
       stop("\"membership\" should be specified.\n")
     }

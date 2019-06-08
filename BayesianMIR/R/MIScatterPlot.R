@@ -52,6 +52,8 @@
 #' @export
 MIScatterPlot <- function(tidydata, bag_size,
                           true_primary = NULL, pred_primary = NULL){
+  
+  id_fix_true <- vector("list", tidydata$nsample)
   if(!is.null(true_primary)){
     id_fix_true <- list()
     for(i in 1:tidydata$nsample){
@@ -68,6 +70,7 @@ MIScatterPlot <- function(tidydata, bag_size,
     ggdata_true_primary$data <- 1
   }
   
+  id_fix_pred <- vector("list", tidydata$nsample)
   if(!is.null(pred_primary)){
     id_fix_pred <- list()
     for(i in 1:tidydata$nsample){
@@ -89,11 +92,22 @@ MIScatterPlot <- function(tidydata, bag_size,
   
   id_random <- list()
   for(i in 1:tidydata$nsample){
-    if(bag_size > length(id_fix[[i]])){
-      id_random[[i]] <- sample(setdiff(1:tidydata$ninst[i], id_fix[[i]]), 
-                               size = bag_size - length(id_fix[[i]]),
-                               replace = FALSE)
+    if(bag_size >= tidydata$ninst[i]){
+      id_random[[i]] <- setdiff(1:tidydata$ninst[i], id_fix[[i]])
+    } else{
+      if(bag_size > length(id_fix[[i]])){
+        id_random[[i]] <- sample(setdiff(1:tidydata$ninst[i], id_fix[[i]]), 
+                                 size = bag_size - length(id_fix[[i]]),
+                                 replace = FALSE)  
+      } else{
+        id_random[[i]] <- numeric(0)
+      }
     }
+    # if(bag_size > length(id_fix[[i]])){
+    #   id_random[[i]] <- sample(setdiff(1:tidydata$ninst[i], id_fix[[i]]), 
+    #                            size = bag_size - length(id_fix[[i]]),
+    #                            replace = FALSE)
+    # }
   }
   ggdata_random <- Map(function(label, bag, id) {
     suppressWarnings(
