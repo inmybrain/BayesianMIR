@@ -1,50 +1,10 @@
+//------- Source from BMIR.v3.0.cpp: do not edit by hand
 // [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h>
 using namespace Rcpp;
 using namespace arma;
 
-
-mat mvrnormArma(int n, vec mu, mat sigma) {
-  int ncols = sigma.n_cols;
-  mat Y = randn(n, ncols);
-  return repmat(mu, 1, n).t() + Y * chol(sigma);
-}
-
-double log_sum_exp(const vec& x) {
-  unsigned int maxi = x.index_max();
-  double maxv = x(maxi);
-  if (!(maxv > -datum::inf)) {
-    return -datum::inf;
-  }
-  double cumsum = 0.0;
-  for (unsigned int i = 0; i < x.n_elem; i++) {
-    if ((i != maxi) & (x(i) > -datum::inf)) {
-      cumsum += exp(x(i) - maxv);
-    }
-  }
-  return maxv + log1p(cumsum);
-}
-
-IntegerVector oneMultinom(vec probs) {
-  int k = probs.size();
-  IntegerVector ans(k);
-  rmultinom(1, probs.begin(), k, ans.begin());
-  return(ans);
-}
-
-IntegerVector FindEveryOne(IntegerVector delta){
-  int n = delta.length();
-  int jj = 0;
-  IntegerVector idx;
-  for(int ii = 0; ii < n; ii++){
-    if(delta[ii] == 1){
-      idx.push_back(ii);
-      jj++;
-    }
-  }
-  return idx;
-}
-
+#include "misc.h"
 // [[Rcpp::export]]
 Rcpp::List Run1Gibbs_cpp(
     Rcpp::IntegerVector ninst,
@@ -103,26 +63,26 @@ Rcpp::List Run1Gibbs_cpp(
 
 // [[Rcpp::export]]
 Rcpp::List BMIR_cpp(int ntotal,
-              int nwarm,
-              int nthin,
-              
-              Rcpp::IntegerVector ninst,
-              arma::colvec Y,
-              arma::mat X1,
-              
-              arma::colvec hp_mu_coef, // mu such that beta ~ MVN(mu, xxx)
-              double hp_a, // a : sigma_eps^2 ~ IG(a,b)
-              double hp_b, // b : sigma_eps^2 ~ IG(a,b)
-              double hp_g_coef,
-              double hp_sig2_y,
-              arma::colvec hp_pi,
-              arma::mat hp_inv_Sig_coef, // Sig^{-1} such that beta ~ MVN(mu, hp_sig2_y/g_beta * Sig)
-              
-              arma::colvec coef,
-              double sig2_error,
-              Rcpp::IntegerVector delta,
-              
-              bool return_delta = false
+                    int nwarm,
+                    int nthin,
+                    
+                    Rcpp::IntegerVector ninst,
+                    arma::colvec Y,
+                    arma::mat X1,
+                    
+                    arma::colvec hp_mu_coef, // mu such that beta ~ MVN(mu, xxx)
+                    double hp_a, // a : sigma_eps^2 ~ IG(a,b)
+                    double hp_b, // b : sigma_eps^2 ~ IG(a,b)
+                    double hp_g_coef,
+                    double hp_sig2_y,
+                    arma::colvec hp_pi,
+                    arma::mat hp_inv_Sig_coef, // Sig^{-1} such that beta ~ MVN(mu, hp_sig2_y/g_beta * Sig)
+                    
+                    arma::colvec coef,
+                    double sig2_error,
+                    Rcpp::IntegerVector delta,
+                    
+                    bool return_delta = false
 ){
   int iter;
   double tick = 0.2;
@@ -190,3 +150,4 @@ Rcpp::List BMIR_cpp(int ntotal,
     Named("delta") = res_delta
   );
 }
+

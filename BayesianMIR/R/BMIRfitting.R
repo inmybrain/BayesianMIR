@@ -1,4 +1,5 @@
-## Bayesian inference ------------------------------------------------------
+##------- Source from BMIR_Fun.v6.0.R: do not edit by hand
+
 
 #' @name getHypara
 #' @title Generate hyperparameters
@@ -195,7 +196,7 @@ BMIR_sampler <- function(ntotal = 100000,
                                return_delta = return_delta
     )
     cat(sprintf("Elapsed time for chain%d=%.3f mins: MCMC sampling is done!\n", nc, difftime(Sys.time(), s_time, units = "mins")))
-
+    
     ## save pip
     pip <- cbind(pip, res_mcmc[[nc]]$pip)
     
@@ -221,3 +222,5 @@ BMIR_sampler <- function(ntotal = 100000,
   )
   return(res)
 }
+
+

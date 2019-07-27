@@ -1,4 +1,5 @@
-## Inference ---------------------------------------------------------------
+##------- Source from BMIR_Fun.v6.0.R: do not edit by hand
+
 
 #' @name predict.BMIR
 #' @title Prediction for the Bayesian Muliple Instance Regression Model
@@ -61,21 +62,23 @@ predict.BMIR <- function(BMIRchain, pip, tidydata, newtidydata, k = 1){
   # BMIRchain = res_BMIR$fit[[1]]$Result_1$mcsample
   # pip = res_BMIR$fit[[1]]$Result_1$par$pip
   # tidydata = tidydata_real
-  # newtidydata = tidy_LUAD
-  # k = 1
+  # newtidydata = tidy_LUAD 
+  # k = 10
+  if(k <= 0){
+    stop("k should be strictly bigger than 0.\n")
+  }
   if(any(k > newtidydata$ninst)){
     warning("k is larger than bag size of some bags.\nSuch bags will use all instances in prediction.\n")
-   # stop("Please choose smaller k (<= bag sizes).\n") 
+    # stop("Please choose smaller k (<= bag sizes).\n") 
   }
   if(is.list(pip)){
     pip <- unlist(pip)
   }
-  pip <- logit(pip - rep(1 / tidydata$ninst, tidydata$ninst))
-  
   traindata <- data.frame(Reduce(rbind, tidydata$feature_inst),
                           membership = tidydata$membership,
                           pip = pip
   )
+  traindata$pip <- logit(traindata$pip - rep(1 / tidydata$ninst, tidydata$ninst))
   colnames(traindata) <- c(paste0("X", 1:tidydata$nfeature_inst), "membership", "pip")
   newdata <- data.frame(X = Reduce(rbind, newtidydata$feature_inst),
                         membership = newtidydata$membership,
@@ -90,9 +93,13 @@ predict.BMIR <- function(BMIRchain, pip, tidydata, newtidydata, k = 1){
   # tidydata$fittedpip <- split(fit$predicted, newdata$membership)
   # tidydata$fittedind <- lapply(tidydata$fittedpip, function(x) rank(x, ties.method = "min") <= k)
   
-  newtidydata$predpip <- split(exp(fit$test$predicted) / (1 + exp(fit$test$predicted)) + 1 / newdata$ninst, 
-                               newdata$membership)
-  newtidydata$predind <- lapply(newtidydata$predpip, function(x) rank(-x, ties.method = "min") <= k) # rank in decreasing order
+  newtidydata$predpip <- split(exp(fit$test$predicted) / (1 + exp(fit$test$predicted)) + 1 / newdata$ninst,
+                               newdata$membership) # logit back-transform
+  if(0 < k & k < 1){
+    newtidydata$predind <- lapply(newtidydata$predpip, function(x) rank(-x, ties.method = "min") <= max(length(x) * k, 1)) # rank in decreasing order
+  } else{
+    newtidydata$predind <- lapply(newtidydata$predpip, function(x) rank(-x, ties.method = "min") <= k) # rank in decreasing order
+  }
   
   
   ## Bag-level prediction

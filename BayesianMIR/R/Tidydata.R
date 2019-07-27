@@ -1,4 +1,5 @@
-## Set up data for BMIR fitting
+##------- Source from BMIR_Fun.v6.0.R: do not edit by hand
+
 
 #' @name Tidy_dataset
 #' @title Tidy a dataset for the multiple instance learning
@@ -14,21 +15,26 @@
 #' \item{ninst}{A vector of length r, each entry of which is the number of instances in a bag.}
 #' \item{membership}{A vector of integers that indicate group indices of all instances.}
 #' @examples
-#' ## labeled bags
+#' ## List input
+#' ### labeled bags
 #' Tidy_dataset(label = rnorm(3), feature_inst = replicate(3, matrix(rnorm(10), 2), simplify = FALSE))
-#' 
-#' ## unlabeled bags
+#' ### unlabeled bags
 #' Tidy_dataset(feature_inst = replicate(3, matrix(rnorm(10), 2), simplify = FALSE))
+#' ## Matrix input is also possible
+#' feature <- cbind(c(1,1,1,2,2,3), matrix(rnorm(10 * 3), ncol = 5))
+#' Tidy_dataset(label = rnorm(3), feature_inst = feature[,-1], membership = feature[,1])
 #' @export
 Tidy_dataset <- function(label = NULL, feature_inst, membership = NULL){
   ## Transform a matrix or data frame input to a list  
   if(class(feature_inst) == "list"){
-    # okay
+    cn <- colnames(feature_inst[[1]])
+    ### done
   } else if(any(class(feature_inst) %in% c("data.frame", "matrix"))){
+    cn <- colnames(feature_inst)
     if(is.null(membership)){
       stop("\"membership\" should be specified.\n")
     }
-    feature_inst <- split(feature_inst, membership)
+    feature_inst <- split(data.frame(feature_inst), membership)
   } else{
     stop("\"feature_inst\" should be either a list or a matrix (or a data.frame).\n")
   }
@@ -41,12 +47,15 @@ Tidy_dataset <- function(label = NULL, feature_inst, membership = NULL){
   if(length(p) > 1){
     stop("\"feature_inst\" should have an equal number of features.\n")
   }
+  if(is.null(cn)){
+    cn <- paste0("X", 1:p)
+  }
+  
   
   ## List elements are converted to a data.frame
   if(any(!unlist(lapply(feature_inst, is.data.frame)))){
     feature_inst <- lapply(feature_inst, function(x){
       x <- data.frame(x)
-      colnames(x) <- paste0("X", 1:p)
       return(x)
     })
   }
@@ -58,13 +67,20 @@ Tidy_dataset <- function(label = NULL, feature_inst, membership = NULL){
     }
   }
   
+  ## Retrieve column names
+  feature_inst <- lapply(feature_inst, function(x){
+    colnames(x) <- cn
+    return(x)
+  })
   ## Return a list
   res <- list(label = label,
               feature_inst = feature_inst,
               nsample = length(feature_inst),
               nfeature_inst = p,
-              ninst = unlist(lapply(feature_inst, nrow))
+              ninst = unlist(lapply(feature_inst, nrow), use.names = FALSE)
   )
   res$membership <- rep(seq_len(res$nsample), res$ninst)
   return(res)
 }
+
+

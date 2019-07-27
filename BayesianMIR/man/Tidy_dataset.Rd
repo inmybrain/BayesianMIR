@@ -26,9 +26,12 @@ A list with components:
 Generate a list of components frquently used in the multiple instance learning
 }
 \examples{
-## labeled bags
+## List input
+### labeled bags
 Tidy_dataset(label = rnorm(3), feature_inst = replicate(3, matrix(rnorm(10), 2), simplify = FALSE))
-
-## unlabeled bags
+### unlabeled bags
 Tidy_dataset(feature_inst = replicate(3, matrix(rnorm(10), 2), simplify = FALSE))
+## Matrix input is also possible
+feature <- cbind(c(1,1,1,2,2,3), matrix(rnorm(10 * 3), ncol = 5))
+Tidy_dataset(label = rnorm(3), feature_inst = feature[,-1], membership = feature[,1])
 }

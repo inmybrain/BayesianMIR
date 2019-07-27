@@ -86,6 +86,11 @@ tidydata <- Tidy_dataset(label = label[1:100],
 newtidydata <- Tidy_dataset(feature_inst = bag[-(1:100)])
 ```
 
+Using `MISummarize`, we can print the basic information about the dataset.
+```{r, eval = TRUE}
+MISummarize(tidydata)
+```
+
 We can obtain the MCMC samples using `BMIR_sampler`.
 ```{r, eval = TRUE}
 ## BMIR model fitting
