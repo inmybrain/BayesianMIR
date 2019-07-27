@@ -76,6 +76,17 @@ tidydata <- Tidy_dataset(label = label[1:100],
 newtidydata <- Tidy_dataset(feature_inst = bag[-(1:100)])
 ```
 
+Using `MISummarize`, we can print the basic information about the dataset.
+
+``` r
+MISummarize(tidydata)
+#> Number of bags : 100
+#> Number of features : 5(V1, V2, V3, V4, V5,...)
+#> Number of instances in bags : 
+#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#>       5       5       5       5       5       5
+```
+
 We can obtain the MCMC samples using `BMIR_sampler`.
 
 ``` r
@@ -99,7 +110,7 @@ MIScatterPlot(tidydata = tidydata,
 )
 ```
 
-![](README-unnamed-chunk-6-1.png)
+![](README-unnamed-chunk-7-1.png)
 
 Using slightl modified `ggmcmc::ggs_density` function, we can have the Bayesian inference.
 
@@ -175,7 +186,7 @@ ggs_density(ggs_mcmc %>%
         axis.ticks.y = element_blank())
 ```
 
-![](README-unnamed-chunk-7-1.png)
+![](README-unnamed-chunk-8-1.png)
 
 ### Prediction in new bags
 
@@ -196,9 +207,10 @@ ggplot(data = data.frame(pred = pred_fit$newtidydata$label,
                          true = label[-(1:100)]), 
        mapping = aes(x = pred, y = true)) + 
   geom_point() + geom_abline(intercept = 0, slope = 1, color = "red")
+#> Warning: Removed 100 rows containing missing values (geom_point).
 ```
 
-![](README-unnamed-chunk-9-1.png)
+![](README-unnamed-chunk-10-1.png)
 
 Notes
 -----
