@@ -94,7 +94,7 @@ MISummarize(tidydata)
 We can obtain the MCMC samples using `BMIR_sampler`.
 ```{r, eval = TRUE}
 ## BMIR model fitting
-ntotal <- 10000
+ntotal <- 20000
 BMIR_fit <- BMIR_sampler(ntotal = ntotal, tidydata = tidydata)
 ```
 
@@ -160,7 +160,7 @@ ggs_density <- function (D, ncol, family = NA, rug = FALSE, hpd = FALSE, greek =
 ggs_mcmc <- ggmcmc::ggs(BMIR_fit$mcmclist)
 ggs_mcmc$Parameter <- factor(ggs_mcmc$Parameter, labels = c(paste0("coef", 1:(nfeature + 1)), "sig2_error"))
 ggs_density(ggs_mcmc %>% 
-              filter(Iteration > ntotal * 1 / 4), 
+              filter(Iteration > ntotal * 0.5), 
             ncol = 2,
             hpd = TRUE) + 
   geom_vline(data = data.frame(Parameter = c(paste0("coef", 1:(nfeature + 1)), "sig2_error"),

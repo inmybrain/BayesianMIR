@@ -91,11 +91,11 @@ We can obtain the MCMC samples using `BMIR_sampler`.
 
 ``` r
 ## BMIR model fitting
-ntotal <- 10000
+ntotal <- 20000
 BMIR_fit <- BMIR_sampler(ntotal = ntotal, tidydata = tidydata)
 #> =============================================================
 #> Multiple Instance Bayesian Regression
-#> Elapsed time for chain1=0.017 mins: MCMC sampling is done!
+#> Elapsed time for chain1=0.031 mins: MCMC sampling is done!
 ```
 
 ### Visualization
@@ -175,7 +175,7 @@ ggs_density <- function (D, ncol, family = NA, rug = FALSE, hpd = FALSE, greek =
 ggs_mcmc <- ggmcmc::ggs(BMIR_fit$mcmclist)
 ggs_mcmc$Parameter <- factor(ggs_mcmc$Parameter, labels = c(paste0("coef", 1:(nfeature + 1)), "sig2_error"))
 ggs_density(ggs_mcmc %>% 
-              filter(Iteration > ntotal * 1 / 4), 
+              filter(Iteration > ntotal * 0.5), 
             ncol = 2,
             hpd = TRUE) + 
   geom_vline(data = data.frame(Parameter = c(paste0("coef", 1:(nfeature + 1)), "sig2_error"),
@@ -184,6 +184,19 @@ ggs_density(ggs_mcmc %>%
   labs(x = "Value", y = "Density") + 
   theme(axis.text.y = element_blank(),
         axis.ticks.y = element_blank())
+#> Warning: Groups with fewer than two data points have been dropped.
+
+#> Warning: Groups with fewer than two data points have been dropped.
+
+#> Warning: Groups with fewer than two data points have been dropped.
+
+#> Warning: Groups with fewer than two data points have been dropped.
+
+#> Warning: Groups with fewer than two data points have been dropped.
+
+#> Warning: Groups with fewer than two data points have been dropped.
+
+#> Warning: Groups with fewer than two data points have been dropped.
 ```
 
 ![](README-unnamed-chunk-8-1.png)

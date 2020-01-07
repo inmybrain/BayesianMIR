@@ -15,7 +15,9 @@
 #' MISummarize(tidydata)
 #' @export
 MISummarize <- function(tidydata, plot = FALSE, bag_size = 5){
-  # tidydata <- tidydata_real
+  # tidydata = tidydata_real
+  # plot = T
+  # bag_size = 10
   
   cat(sprintf("Number of bags : %d\n", tidydata$nsample))
   cat(sprintf("Number of features : %d(", tidydata$nfeature_inst))
@@ -81,7 +83,8 @@ MISummarize <- function(tidydata, plot = FALSE, bag_size = 5){
 #' @export
 MIScatterPlot <- function(tidydata, bag_size,
                           true_primary = NULL, pred_primary = NULL){
-  
+  # tidydata = tidydata_real
+  # bag_size = 10
   id_fix_true <- vector("list", tidydata$nsample)
   if(!is.null(true_primary)){
     id_fix_true <- list()

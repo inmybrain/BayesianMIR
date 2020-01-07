@@ -1,8 +1,8 @@
 Package: BayesianMIR
 Type: Package
 Title: Bayesian Multiple Instance Regression Modeling
-Version: 2.0
-Date: 2019-07-27
+Version: 2.1
+Date: 2020-01-08
 Author: Seongoh Park [aut, cre], Xinlei Wang [aut], Johan Lim [aut], Tao Wang [aut], Tianshi Lu [aut], Guanghua Xiao [aut]
 Maintainer: Seongoh Park <seongohpark6@gmail.com>
 Description: Perform the multiple instance regression by the Bayesian modeling. The posterior samples allows one to perform Bayesian inference such as the credible interval and the posterior inclusion probability. Prediction for new bags is available through another stage of modeling.
