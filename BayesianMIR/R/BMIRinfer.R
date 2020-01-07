@@ -59,11 +59,12 @@
 #'   ggplot2::geom_point() + ggplot2::geom_abline(intercept = 0, slope = 1, color = "red")
 #' @export
 predict.BMIR <- function(BMIRchain, pip, tidydata, newtidydata, k = 1){
-  # BMIRchain = res_BMIR$fit[[1]]$Result_1$mcsample
-  # pip = res_BMIR$fit[[1]]$Result_1$par$pip
-  # tidydata = tidydata_real
-  # newtidydata = tidy_LUAD 
-  # k = 10
+  # BMIRchain = BMIR_fit$mcmclist$Chain1
+  # pip = BMIR_fit$pip[,1]
+  # tidydata = tidydata
+  # newtidydata = newtidydata
+  # k = 1
+  
   if(k <= 0){
     stop("k should be strictly bigger than 0.\n")
   }
@@ -103,7 +104,7 @@ predict.BMIR <- function(BMIRchain, pip, tidydata, newtidydata, k = 1){
   
   
   ## Bag-level prediction
-  coef <- colMeans(BMIRchain)[paste0("coef.", 1:(tidydata$nfeature + 1))]
+  coef <- colMeans(BMIRchain)[paste0("coef", 1:(tidydata$nfeature + 1))]
   newtidydata$label <- unlist(Map(function(feature, id, pip){
     ypred <- coef[1] + as.matrix(feature[id,,drop = FALSE]) %*% coef[-1]
     return(sum(ypred * pip[id] / sum(pip[id])))

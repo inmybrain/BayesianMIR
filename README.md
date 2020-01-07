@@ -6,7 +6,7 @@
 BayesianMIR
 ===========
 
-This is a README file of the R package *BayesianMIR*. In our paper, not yet available, we develop the Bayesian multi-instance regression (BMIR) model, applied to the multiple instance regression problem. More details about the structure of data and the Bayesian modeling, see our upcoming paper.
+This is a README file of the R package *BayesianMIR*. In our paper, not yet available, we develop the Bayesian multiple instance regression model we call BMIR, applied to the multiple instance regression problem. For more details about the structure of data and the Bayesian modeling, we refer readers to our upcoming paper.
 
 <!-- We assume the primary instance assumption used in @RayPage2005, that is, there is one primary instance explaining the bag-level response variable. -->
 Installation of the package
@@ -28,11 +28,11 @@ If you come across a problem like [this](https://github.com/r-lib/remotes/issues
 A basic example of using the package
 ------------------------------------
 
-### Generate the Monte Carlo Markov Chains (model estimation)
+We give a toy example to apply the main function `BMIR_sampler`, which performs random sampling from the joint posterior distribution.
 
-We give a toy example to apply the main function `BMIR_sampler` to do sampling from the posterior distribution.
+### Generate data
 
-To do it, we first generate multiple instance regression data.
+We first generate simulated data under the bag-instance structure.
 
 ``` r
 rm(list = ls())
@@ -65,7 +65,9 @@ label <- unlist(lapply(bag, function(feature){
 label <- label + rnorm(nsample, mean = 0, sd = 1)
 ```
 
-For convenience, we use `Tidy_dataset` function to tidy data.
+### Exploratory data analysis
+
+To facilitate our analysis, we use `Tidy_dataset` function to tidy data up. The first 100 samples are used for model estimation, and the others will be test samples to validate the fitted model.
 
 ``` r
 library(BayesianMIR)
@@ -76,18 +78,35 @@ tidydata <- Tidy_dataset(label = label[1:100],
 newtidydata <- Tidy_dataset(feature_inst = bag[-(1:100)])
 ```
 
-Using `MISummarize`, we can print the basic information about the dataset.
+Applying `MISummarize` to the output of `Tidy_dataset`, we can get the basic information about the dataset:
+
+-   the number of bags,
+-   the number of features,
+-   (summary of) the numbers of instances in bags (or bag sizes).
 
 ``` r
 MISummarize(tidydata)
 #> Number of bags : 100
-#> Number of features : 5(V1, V2, V3, V4, V5,...)
+#> Number of features : 5 (V1, V2, V3, V4, V5)
 #> Number of instances in bags : 
 #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #>       5       5       5       5       5       5
 ```
 
-We can obtain the MCMC samples using `BMIR_sampler`.
+A scatter plot for multiple instances is given below using `MIScatterPlot`. Each dimension of covariates is plotted on the x-axis along with bag-level responses (labels) on the y-axis. If you know which instance(s) is(are) primary in each bag, then they would be distinguished from non-primary instances.
+
+``` r
+MIScatterPlot(tidydata = tidydata, 
+              bag_size = 5,
+              true_primary = lapply(1:tidydata$nsample, function(x) rep(c(T,F), c(1, ninst - 1)))
+)
+```
+
+![](README-unnamed-chunk-6-1.png)
+
+### Generate the Monte Carlo Markov Chains (model estimation)
+
+We can obtain the MCMC samples using `BMIR_sampler`. By default, the first halves are discarded as the burn-in steps. You can thin the samples by using `nthin` option and get multiple chains by using `nchain` option. Please refer to the help page of the function to see what it returns.
 
 ``` r
 ## BMIR model fitting
@@ -95,12 +114,12 @@ ntotal <- 20000
 BMIR_fit <- BMIR_sampler(ntotal = ntotal, tidydata = tidydata)
 #> =============================================================
 #> Multiple Instance Bayesian Regression
-#> Elapsed time for chain1=0.031 mins: MCMC sampling is done!
+#> Elapsed time for chain1=0.034 mins: MCMC sampling is done!
 ```
 
-### Visualization
+### Visualization after model fitting
 
-Using the fitted model, a scatter plot for multiple instance regression can be provided as follows.
+Using the fitted model, you can specify the estimated status of being a primary instance on the scatter plot provided by `MIScatterPlot`. You can check how many overlaps are between the estimated and the truth.
 
 ``` r
 MIScatterPlot(tidydata = tidydata, 
@@ -110,24 +129,13 @@ MIScatterPlot(tidydata = tidydata,
 )
 ```
 
-![](README-unnamed-chunk-7-1.png)
+![](README-unnamed-chunk-8-1.png)
 
-Using slightl modified `ggmcmc::ggs_density` function, we can have the Bayesian inference.
+By slightly modifying `ggs_density` function from the package `ggmcmc`, we can show one of the Bayesian inferences that BMIR does provide: the highest posterior density intervals of parameters.
 
 ``` r
 # install.packages("ggmcmc")
 library("ggmcmc")
-#> Loading required package: dplyr
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-#> Loading required package: tidyr
-#> Loading required package: ggplot2
 ggs_density <- function (D, ncol, family = NA, rug = FALSE, hpd = FALSE, greek = FALSE) 
   ## - ncol is added!
   ## - ci -> ggmcmc::ci
@@ -175,7 +183,7 @@ ggs_density <- function (D, ncol, family = NA, rug = FALSE, hpd = FALSE, greek =
 ggs_mcmc <- ggmcmc::ggs(BMIR_fit$mcmclist)
 ggs_mcmc$Parameter <- factor(ggs_mcmc$Parameter, labels = c(paste0("coef", 1:(nfeature + 1)), "sig2_error"))
 ggs_density(ggs_mcmc %>% 
-              filter(Iteration > ntotal * 0.5), 
+              filter(Iteration > max(Iteration) / 2), 
             ncol = 2,
             hpd = TRUE) + 
   geom_vline(data = data.frame(Parameter = c(paste0("coef", 1:(nfeature + 1)), "sig2_error"),
@@ -184,32 +192,19 @@ ggs_density(ggs_mcmc %>%
   labs(x = "Value", y = "Density") + 
   theme(axis.text.y = element_blank(),
         axis.ticks.y = element_blank())
-#> Warning: Groups with fewer than two data points have been dropped.
-
-#> Warning: Groups with fewer than two data points have been dropped.
-
-#> Warning: Groups with fewer than two data points have been dropped.
-
-#> Warning: Groups with fewer than two data points have been dropped.
-
-#> Warning: Groups with fewer than two data points have been dropped.
-
-#> Warning: Groups with fewer than two data points have been dropped.
-
-#> Warning: Groups with fewer than two data points have been dropped.
 ```
 
-![](README-unnamed-chunk-8-1.png)
+![](README-unnamed-chunk-9-1.png)
 
 ### Prediction in new bags
 
-When new bags (i.e. without labels) are given, we can predict both labels and primary instances using `predict.BMIR`.
+When new bags are given, BMIR can both predict labels and identify primary instances using `predict.BMIR`. By default, `predict.BMIR` depends on `randomForest` function from the package `randomForest`, which helps identifying primary instances in new bags. If you specify `k` (the number of primary instances in each new bag) larger than 1, then the selected primary instances will be aggregated by their average.
 
 ``` r
 pred_fit <- predict.BMIR(BMIRchain = BMIR_fit$mcmclist$Chain1, 
                          pip = BMIR_fit$pip[,1], 
                          tidydata = tidydata, 
-                         newtidydata = newtidydata, 
+                         newtidydata = newtidydata,
                          k = 1)
 ```
 
@@ -220,10 +215,9 @@ ggplot(data = data.frame(pred = pred_fit$newtidydata$label,
                          true = label[-(1:100)]), 
        mapping = aes(x = pred, y = true)) + 
   geom_point() + geom_abline(intercept = 0, slope = 1, color = "red")
-#> Warning: Removed 100 rows containing missing values (geom_point).
 ```
 
-![](README-unnamed-chunk-10-1.png)
+![](README-unnamed-chunk-11-1.png)
 
 Notes
 -----

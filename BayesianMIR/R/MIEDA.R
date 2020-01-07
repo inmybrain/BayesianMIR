@@ -20,9 +20,15 @@ MISummarize <- function(tidydata, plot = FALSE, bag_size = 5){
   # bag_size = 10
   
   cat(sprintf("Number of bags : %d\n", tidydata$nsample))
-  cat(sprintf("Number of features : %d(", tidydata$nfeature_inst))
-  cat(sprintf("%s,", colnames(tidydata$feature_inst[[1]])[1:min(10, tidydata$nfeature_inst)]))
-  cat("...)\n")
+  cat(sprintf("Number of features : %d (", tidydata$nfeature_inst))
+  tmp <- sprintf("%s,", colnames(tidydata$feature_inst[[1]])[1:min(10, tidydata$nfeature_inst)])
+  tmp[length(tmp)] <- sub(",", "", tmp[length(tmp)])
+  cat(tmp)
+  if(tidydata$nfeature_inst > 10){
+    cat("...)\n")
+  } else{
+    cat(")\n")
+  }
   cat(sprintf("Number of instances in bags : \n"))
   print(summary(tidydata$ninst))
   if(plot){
