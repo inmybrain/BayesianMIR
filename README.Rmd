@@ -12,10 +12,17 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-",
+  fig.path = "./fig/README-",
   error = TRUE
 )
 ```
+
+
+![QBRC_logo](./fig/QBRC.jpg)
+
+Please visit the following website for more bioinformatics tools from Dr. Tao Wang's lab: https://qbrc.swmed.edu/labs/wanglab
+
+This work is initiated when Dr. Seongoh Park visited QBRC at UT Southwestern Medical Center in 2018.
 
 # BayesianMIR
 

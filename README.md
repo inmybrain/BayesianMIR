@@ -3,6 +3,12 @@
 <!-- To add a badge  -->
 <!-- [![Travis-CI Build Status](https://travis-ci.org/geanders/countyweather.svg?branch=master)](https://travis-ci.org/geanders/countyweather) -->
 <!-- [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/countyweather)](https://cran.r-project.org/package=countyweather) -->
+![QBRC\_logo](./fig/QBRC.jpg)
+
+Please visit the following website for more bioinformatics tools from Dr. Tao Wang's lab: <https://qbrc.swmed.edu/labs/wanglab>
+
+This work is initiated when Dr. Seongoh Park visited QBRC at UT Southwestern Medical Center in 2018.
+
 BayesianMIR
 ===========
 
@@ -102,7 +108,7 @@ MIScatterPlot(tidydata = tidydata,
 )
 ```
 
-![](README-unnamed-chunk-6-1.png)
+![](./fig/README-unnamed-chunk-6-1.png)
 
 ### Generate the Monte Carlo Markov Chains (model estimation)
 
@@ -114,7 +120,7 @@ ntotal <- 20000
 BMIR_fit <- BMIR_sampler(ntotal = ntotal, tidydata = tidydata)
 #> =============================================================
 #> Multiple Instance Bayesian Regression
-#> Elapsed time for chain1=0.034 mins: MCMC sampling is done!
+#> Elapsed time for chain1=0.035 mins: MCMC sampling is done!
 ```
 
 ### Visualization after model fitting
@@ -129,7 +135,7 @@ MIScatterPlot(tidydata = tidydata,
 )
 ```
 
-![](README-unnamed-chunk-8-1.png)
+![](./fig/README-unnamed-chunk-8-1.png)
 
 By slightly modifying `ggs_density` function from the package `ggmcmc`, we can show one of the Bayesian inferences that BMIR does provide: the highest posterior density intervals of parameters.
 
@@ -194,7 +200,7 @@ ggs_density(ggs_mcmc %>%
         axis.ticks.y = element_blank())
 ```
 
-![](README-unnamed-chunk-9-1.png)
+![](./fig/README-unnamed-chunk-9-1.png)
 
 ### Prediction in new bags
 
@@ -217,7 +223,7 @@ ggplot(data = data.frame(pred = pred_fit$newtidydata$label,
   geom_point() + geom_abline(intercept = 0, slope = 1, color = "red")
 ```
 
-![](README-unnamed-chunk-11-1.png)
+![](./fig/README-unnamed-chunk-11-1.png)
 
 Notes
 -----
