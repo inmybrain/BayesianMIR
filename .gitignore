@@ -1,7 +1,36 @@
-# RMD files
-.rmd
 
+# Created by https://www.gitignore.io/api/r,macos,windows
+# Edit at https://www.gitignore.io/?templates=r,macos,windows
 
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### R ###
 # History files
 .Rhistory
 .Rapp.history
@@ -36,5 +65,46 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 
-# Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
-rsconnect/
+### R.Bookdown Stack ###
+# R package: bookdown caching files
+/*_files/
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# End of https://www.gitignore.io/api/r,macos,windows
+.Rproj.user
+
+
+### README files ###
+README.Rmd
+README.log
+
+
+### tar.gz files ###
+*.tar.gz
+
+### png files ###
+*.png
