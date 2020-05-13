@@ -12,7 +12,7 @@ This work is initiated when Dr. Seongoh Park visited QBRC at UT Southwestern Med
 BayesianMIR
 ===========
 
-This is a README file of the R package *BayesianMIR*. In our paper, not yet available, we develop the Bayesian multiple instance regression model we call BMIR, applied to the multiple instance regression problem. For more details about the structure of data and the Bayesian modeling, we refer readers to our upcoming paper.
+This is a README file of the R package *BayesianMIR*. In our paper, we develop the Bayesian multiple instance regression model we call BMIR, applied to the multiple instance regression problem. For more details about the structure of data and the Bayesian modeling, we refer readers to our paper available [here](https://doi.org/10.1177/0962280220914321).
 
 <!-- We assume the primary instance assumption used in @RayPage2005, that is, there is one primary instance explaining the bag-level response variable. -->
 Installation of the package
@@ -120,7 +120,7 @@ ntotal <- 20000
 BMIR_fit <- BMIR_sampler(ntotal = ntotal, tidydata = tidydata)
 #> =============================================================
 #> Multiple Instance Bayesian Regression
-#> Elapsed time for chain1=0.035 mins: MCMC sampling is done!
+#> Elapsed time for chain1=0.061 mins: MCMC sampling is done!
 ```
 
 ### Visualization after model fitting
