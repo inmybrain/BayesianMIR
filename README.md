@@ -1,22 +1,31 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- To add a badge  -->
+
 <!-- [![Travis-CI Build Status](https://travis-ci.org/geanders/countyweather.svg?branch=master)](https://travis-ci.org/geanders/countyweather) -->
+
 <!-- [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/countyweather)](https://cran.r-project.org/package=countyweather) -->
+
 ![QBRC\_logo](./fig/QBRC.jpg)
 
-Please visit the following website for more bioinformatics tools from Dr. Tao Wang's lab: <https://qbrc.swmed.edu/labs/wanglab>
+Please visit the following website for more bioinformatics tools from
+Dr. Tao Wang’s lab: <https://qbrc.swmed.edu/labs/wanglab>
 
-This work is initiated when Dr. Seongoh Park visited QBRC at UT Southwestern Medical Center in 2018.
+This work is initiated when Dr. Seongoh Park visited QBRC at UT
+Southwestern Medical Center in 2018.
 
-BayesianMIR
-===========
+# BayesianMIR
 
-This is a README file of the R package *BayesianMIR*. In our paper, we develop the Bayesian multiple instance regression model we call BMIR, applied to the multiple instance regression problem. For more details about the structure of data and the Bayesian modeling, we refer readers to our paper available [here](https://doi.org/10.1177/0962280220914321).
+This is a README file of the R package *BayesianMIR*. In our paper, we
+develop the Bayesian multiple instance regression model we call BMIR,
+applied to the multiple instance regression problem. For more details
+about the structure of data and the Bayesian modeling, we refer readers
+to our paper available [here](https://doi.org/10.1177/0962280220914321).
 
 <!-- We assume the primary instance assumption used in @RayPage2005, that is, there is one primary instance explaining the bag-level response variable. -->
-Installation of the package
----------------------------
+
+## Installation of the package
 
 To install our package, you may simply execute the following codes:
 
@@ -25,16 +34,24 @@ To install our package, you may simply execute the following codes:
 devtools::install_github("inmybrain/BayesianMIR", subdir = "BayesianMIR") # don't forget to specify subdir!
 ```
 
-If you come across a problem like [this](https://github.com/r-lib/remotes/issues/130), please refer to [this answer](https://github.com/r-lib/remotes/issues/130#issuecomment-423830669) in that issue.
+If you come across a problem like
+[this](https://github.com/r-lib/remotes/issues/130), please refer to
+[this
+answer](https://github.com/r-lib/remotes/issues/130#issuecomment-423830669)
+in that issue.
 
 <!-- Or you can install the source file using the command line after downloading it from [here](XXX) (NOT AVAILABLE NOW); -->
-<!-- ```{bash, eval = FALSE} -->
-<!-- R CMD INSTALL BayesianMIR_1.0.tar.gz -->
-<!-- ``` -->
-A basic example of using the package
-------------------------------------
 
-We give a toy example to apply the main function `BMIR_sampler`, which performs random sampling from the joint posterior distribution.
+<!-- ```{bash, eval = FALSE} -->
+
+<!-- R CMD INSTALL BayesianMIR_1.0.tar.gz -->
+
+<!-- ``` -->
+
+## A basic example of using the package
+
+We give a toy example to apply the main function `BMIR_sampler`, which
+performs random sampling from the joint posterior distribution.
 
 ### Generate data
 
@@ -73,59 +90,68 @@ label <- label + rnorm(nsample, mean = 0, sd = 1)
 
 ### Exploratory data analysis
 
-To facilitate our analysis, we use `Tidy_dataset` function to tidy data up. The first 100 samples are used for model estimation, and the others will be test samples to validate the fitted model.
+To facilitate our analysis, we use `Tidy_dataset` function to tidy data
+up. The first 100 samples are used for model estimation, and the others
+will be test samples to validate the fitted model.
 
 ``` r
 library(BayesianMIR)
-#> Warning: replacing previous import 'ggplot2::margin' by
-#> 'randomForest::margin' when loading 'BayesianMIR'
+#> Error in library(BayesianMIR): there is no package called 'BayesianMIR'
 tidydata <- Tidy_dataset(label = label[1:100],
                          feature_inst = bag[1:100])
+#> Error in Tidy_dataset(label = label[1:100], feature_inst = bag[1:100]): could not find function "Tidy_dataset"
 newtidydata <- Tidy_dataset(feature_inst = bag[-(1:100)])
+#> Error in Tidy_dataset(feature_inst = bag[-(1:100)]): could not find function "Tidy_dataset"
 ```
 
-Applying `MISummarize` to the output of `Tidy_dataset`, we can get the basic information about the dataset:
+Applying `MISummarize` to the output of `Tidy_dataset`, we can get the
+basic information about the dataset:
 
--   the number of bags,
--   the number of features,
--   (summary of) the numbers of instances in bags (or bag sizes).
+  - the number of bags,
+  - the number of features,
+  - (summary of) the numbers of instances in bags (or bag sizes).
+
+<!-- end list -->
 
 ``` r
 MISummarize(tidydata)
-#> Number of bags : 100
-#> Number of features : 5 (V1, V2, V3, V4, V5)
-#> Number of instances in bags : 
-#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#>       5       5       5       5       5       5
+#> Error in MISummarize(tidydata): could not find function "MISummarize"
 ```
 
-A scatter plot for multiple instances is given below using `MIScatterPlot`. Each dimension of covariates is plotted on the x-axis along with bag-level responses (labels) on the y-axis. If you know which instance(s) is(are) primary in each bag, then they would be distinguished from non-primary instances.
+A scatter plot for multiple instances is given below using
+`MIScatterPlot`. Each dimension of covariates is plotted on the x-axis
+along with bag-level responses (labels) on the y-axis. If you know which
+instance(s) is(are) primary in each bag, then they would be
+distinguished from non-primary instances.
 
 ``` r
 MIScatterPlot(tidydata = tidydata, 
               bag_size = 5,
               true_primary = lapply(1:tidydata$nsample, function(x) rep(c(T,F), c(1, ninst - 1)))
 )
+#> Error in MIScatterPlot(tidydata = tidydata, bag_size = 5, true_primary = lapply(1:tidydata$nsample, : could not find function "MIScatterPlot"
 ```
-
-![](./fig/README-unnamed-chunk-6-1.png)
 
 ### Generate the Monte Carlo Markov Chains (model estimation)
 
-We can obtain the MCMC samples using `BMIR_sampler`. By default, the first halves are discarded as the burn-in steps. You can thin the samples by using `nthin` option and get multiple chains by using `nchain` option. Please refer to the help page of the function to see what it returns.
+We can obtain the MCMC samples using `BMIR_sampler`. By default, the
+first halves are discarded as the burn-in steps. You can thin the
+samples by using `nthin` option and get multiple chains by using
+`nchain` option. Please refer to the help page of the function to see
+what it returns.
 
 ``` r
 ## BMIR model fitting
 ntotal <- 20000
 BMIR_fit <- BMIR_sampler(ntotal = ntotal, tidydata = tidydata)
-#> =============================================================
-#> Multiple Instance Bayesian Regression
-#> Elapsed time for chain1=0.061 mins: MCMC sampling is done!
+#> Error in BMIR_sampler(ntotal = ntotal, tidydata = tidydata): could not find function "BMIR_sampler"
 ```
 
 ### Visualization after model fitting
 
-Using the fitted model, you can specify the estimated status of being a primary instance on the scatter plot provided by `MIScatterPlot`. You can check how many overlaps are between the estimated and the truth.
+Using the fitted model, you can specify the estimated status of being a
+primary instance on the scatter plot provided by `MIScatterPlot`. You
+can check how many overlaps are between the estimated and the truth.
 
 ``` r
 MIScatterPlot(tidydata = tidydata, 
@@ -133,11 +159,12 @@ MIScatterPlot(tidydata = tidydata,
               true_primary = lapply(1:tidydata$nsample, function(x) rep(c(T,F), c(1, ninst - 1))), 
               pred_primary = lapply(split(BMIR_fit$pip[,1], tidydata$membership), function(x) rank(-x, ties.method = "min") <= 1)
 )
+#> Error in MIScatterPlot(tidydata = tidydata, bag_size = 5, true_primary = lapply(1:tidydata$nsample, : could not find function "MIScatterPlot"
 ```
 
-![](./fig/README-unnamed-chunk-8-1.png)
-
-By slightly modifying `ggs_density` function from the package `ggmcmc`, we can show one of the Bayesian inferences that BMIR does provide: the highest posterior density intervals of parameters.
+By slightly modifying `ggs_density` function from the package `ggmcmc`,
+we can show one of the Bayesian inferences that BMIR does provide: the
+highest posterior density intervals of parameters.
 
 ``` r
 # install.packages("ggmcmc")
@@ -187,7 +214,9 @@ ggs_density <- function (D, ncol, family = NA, rug = FALSE, hpd = FALSE, greek =
   return(f)
 }
 ggs_mcmc <- ggmcmc::ggs(BMIR_fit$mcmclist)
+#> Error in ggmcmc::ggs(BMIR_fit$mcmclist): object 'BMIR_fit' not found
 ggs_mcmc$Parameter <- factor(ggs_mcmc$Parameter, labels = c(paste0("coef", 1:(nfeature + 1)), "sig2_error"))
+#> Error in factor(ggs_mcmc$Parameter, labels = c(paste0("coef", 1:(nfeature + : object 'ggs_mcmc' not found
 ggs_density(ggs_mcmc %>% 
               filter(Iteration > max(Iteration) / 2), 
             ncol = 2,
@@ -198,13 +227,17 @@ ggs_density(ggs_mcmc %>%
   labs(x = "Value", y = "Density") + 
   theme(axis.text.y = element_blank(),
         axis.ticks.y = element_blank())
+#> Error in filter(., Iteration > max(Iteration)/2): object 'ggs_mcmc' not found
 ```
-
-![](./fig/README-unnamed-chunk-9-1.png)
 
 ### Prediction in new bags
 
-When new bags are given, BMIR can both predict labels and identify primary instances using `predict.BMIR`. By default, `predict.BMIR` depends on `randomForest` function from the package `randomForest`, which helps identifying primary instances in new bags. If you specify `k` (the number of primary instances in each new bag) larger than 1, then the selected primary instances will be aggregated by their average.
+When new bags are given, BMIR can both predict labels and identify
+primary instances using `predict.BMIR`. By default, `predict.BMIR`
+depends on `randomForest` function from the package `randomForest`,
+which helps identifying primary instances in new bags. If you specify
+`k` (the number of primary instances in each new bag) larger than 1,
+then the selected primary instances will be aggregated by their average.
 
 ``` r
 pred_fit <- predict.BMIR(BMIRchain = BMIR_fit$mcmclist$Chain1, 
@@ -212,6 +245,7 @@ pred_fit <- predict.BMIR(BMIRchain = BMIR_fit$mcmclist$Chain1,
                          tidydata = tidydata, 
                          newtidydata = newtidydata,
                          k = 1)
+#> Error in predict.BMIR(BMIRchain = BMIR_fit$mcmclist$Chain1, pip = BMIR_fit$pip[, : could not find function "predict.BMIR"
 ```
 
 Let us see how prediction works.
@@ -221,26 +255,49 @@ ggplot(data = data.frame(pred = pred_fit$newtidydata$label,
                          true = label[-(1:100)]), 
        mapping = aes(x = pred, y = true)) + 
   geom_point() + geom_abline(intercept = 0, slope = 1, color = "red")
+#> Error in data.frame(pred = pred_fit$newtidydata$label, true = label[-(1:100)]): object 'pred_fit' not found
 ```
 
-![](./fig/README-unnamed-chunk-11-1.png)
-
-Notes
------
+## Notes
 
 <!-- - For available covariance structures, see the help page; -->
+
 <!-- ```{r, eval = FALSE} -->
+
 <!-- ?Mclust_SEP_cpp -->
+
 <!-- ``` -->
+
 <!-- - As for initial assignment of cluster membership, each sample is assigned randomly to clusters. -->
-Issues
-------
+
+## Citation
+
+To cite this package, please use this bibtex format:
+
+``` latex
+@article{Park:2020,
+    author = {Seongoh Park and Xinlei Wang and Johan Lim and Guanghua Xiao and Tianshi Lu and Tao Wang},
+    title ={Bayesian multiple instance regression for modeling immunogenic neoantigens},
+    journal = {Statistical Methods in Medical Research},
+    volume = {29},
+    number = {10},
+    pages = {3032-3047},
+    year = {2020},
+    doi = {10.1177/0962280220914321},
+    note ={PMID: 32401701},
+    URL = {https://doi.org/10.1177/0962280220914321},
+    eprint = {https://doi.org/10.1177/0962280220914321}
+}
+```
+
+## Issues
 
 We are happy to troubleshoot any issue with the package;
 
--   please contact to the maintainer by <seongohpark6@gmail.com>, or
+  - please contact to the maintainer by <seongohpark6@gmail.com>, or
 
--   please open an issue in the github repository.
+  - please open an issue in the github repository.
 
 <!-- ## Error and warning messages you may get -->
+
 <!-- ## References  -->

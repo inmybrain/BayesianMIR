@@ -226,6 +226,24 @@ ggplot(data = data.frame(pred = pred_fit$newtidydata$label,
 
 <!-- - As for initial assignment of cluster membership, each sample is assigned randomly to clusters. -->
 
+## Citation
+To cite this package, please use this bibtex format:
+```{latex}
+@article{Park:2020,
+	author = {Seongoh Park and Xinlei Wang and Johan Lim and Guanghua Xiao and Tianshi Lu and Tao Wang},
+	title ={Bayesian multiple instance regression for modeling immunogenic neoantigens},
+	journal = {Statistical Methods in Medical Research},
+	volume = {29},
+	number = {10},
+	pages = {3032-3047},
+	year = {2020},
+	doi = {10.1177/0962280220914321},
+	note ={PMID: 32401701},
+	URL = {https://doi.org/10.1177/0962280220914321},
+	eprint = {https://doi.org/10.1177/0962280220914321}
+}
+```
+
 
 ## Issues
 
