@@ -26,7 +26,7 @@
 #' @export
 Tidy_dataset <- function(label = NULL, feature_inst, membership = NULL){
   ## Transform a matrix or data frame input to a list  
-  if(class(feature_inst) == "list"){
+  if(class(feature_inst)[1] == "list"){
     cn <- colnames(feature_inst[[1]])
     ### done
   } else if(any(class(feature_inst) %in% c("data.frame", "matrix"))){

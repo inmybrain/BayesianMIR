@@ -96,12 +96,11 @@ will be test samples to validate the fitted model.
 
 ``` r
 library(BayesianMIR)
-#> Error in library(BayesianMIR): there is no package called 'BayesianMIR'
+#> Warning: replacing previous import 'ggplot2::margin' by 'randomForest::margin'
+#> when loading 'BayesianMIR'
 tidydata <- Tidy_dataset(label = label[1:100],
                          feature_inst = bag[1:100])
-#> Error in Tidy_dataset(label = label[1:100], feature_inst = bag[1:100]): could not find function "Tidy_dataset"
 newtidydata <- Tidy_dataset(feature_inst = bag[-(1:100)])
-#> Error in Tidy_dataset(feature_inst = bag[-(1:100)]): could not find function "Tidy_dataset"
 ```
 
 Applying `MISummarize` to the output of `Tidy_dataset`, we can get the
@@ -115,7 +114,11 @@ basic information about the dataset:
 
 ``` r
 MISummarize(tidydata)
-#> Error in MISummarize(tidydata): could not find function "MISummarize"
+#> Number of bags : 100
+#> Number of features : 5 (V1, V2, V3, V4, V5)
+#> Number of instances in bags : 
+#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#>       5       5       5       5       5       5
 ```
 
 A scatter plot for multiple instances is given below using
@@ -129,8 +132,9 @@ MIScatterPlot(tidydata = tidydata,
               bag_size = 5,
               true_primary = lapply(1:tidydata$nsample, function(x) rep(c(T,F), c(1, ninst - 1)))
 )
-#> Error in MIScatterPlot(tidydata = tidydata, bag_size = 5, true_primary = lapply(1:tidydata$nsample, : could not find function "MIScatterPlot"
 ```
+
+![](./fig/README-unnamed-chunk-6-1.png)<!-- -->
 
 ### Generate the Monte Carlo Markov Chains (model estimation)
 
@@ -144,7 +148,9 @@ what it returns.
 ## BMIR model fitting
 ntotal <- 20000
 BMIR_fit <- BMIR_sampler(ntotal = ntotal, tidydata = tidydata)
-#> Error in BMIR_sampler(ntotal = ntotal, tidydata = tidydata): could not find function "BMIR_sampler"
+#> =============================================================
+#> Bayesian Multiple Instance Regression
+#> Elapsed time for chain1=0.027 mins: MCMC sampling is done!
 ```
 
 ### Visualization after model fitting
@@ -159,8 +165,9 @@ MIScatterPlot(tidydata = tidydata,
               true_primary = lapply(1:tidydata$nsample, function(x) rep(c(T,F), c(1, ninst - 1))), 
               pred_primary = lapply(split(BMIR_fit$pip[,1], tidydata$membership), function(x) rank(-x, ties.method = "min") <= 1)
 )
-#> Error in MIScatterPlot(tidydata = tidydata, bag_size = 5, true_primary = lapply(1:tidydata$nsample, : could not find function "MIScatterPlot"
 ```
+
+![](./fig/README-unnamed-chunk-8-1.png)<!-- -->
 
 By slightly modifying `ggs_density` function from the package `ggmcmc`,
 we can show one of the Bayesian inferences that BMIR does provide: the
@@ -214,9 +221,7 @@ ggs_density <- function (D, ncol, family = NA, rug = FALSE, hpd = FALSE, greek =
   return(f)
 }
 ggs_mcmc <- ggmcmc::ggs(BMIR_fit$mcmclist)
-#> Error in ggmcmc::ggs(BMIR_fit$mcmclist): object 'BMIR_fit' not found
 ggs_mcmc$Parameter <- factor(ggs_mcmc$Parameter, labels = c(paste0("coef", 1:(nfeature + 1)), "sig2_error"))
-#> Error in factor(ggs_mcmc$Parameter, labels = c(paste0("coef", 1:(nfeature + : object 'ggs_mcmc' not found
 ggs_density(ggs_mcmc %>% 
               filter(Iteration > max(Iteration) / 2), 
             ncol = 2,
@@ -227,8 +232,9 @@ ggs_density(ggs_mcmc %>%
   labs(x = "Value", y = "Density") + 
   theme(axis.text.y = element_blank(),
         axis.ticks.y = element_blank())
-#> Error in filter(., Iteration > max(Iteration)/2): object 'ggs_mcmc' not found
 ```
+
+![](./fig/README-unnamed-chunk-9-1.png)<!-- -->
 
 ### Prediction in new bags
 
@@ -245,7 +251,6 @@ pred_fit <- predict.BMIR(BMIRchain = BMIR_fit$mcmclist$Chain1,
                          tidydata = tidydata, 
                          newtidydata = newtidydata,
                          k = 1)
-#> Error in predict.BMIR(BMIRchain = BMIR_fit$mcmclist$Chain1, pip = BMIR_fit$pip[, : could not find function "predict.BMIR"
 ```
 
 Let us see how prediction works.
@@ -255,8 +260,9 @@ ggplot(data = data.frame(pred = pred_fit$newtidydata$label,
                          true = label[-(1:100)]), 
        mapping = aes(x = pred, y = true)) + 
   geom_point() + geom_abline(intercept = 0, slope = 1, color = "red")
-#> Error in data.frame(pred = pred_fit$newtidydata$label, true = label[-(1:100)]): object 'pred_fit' not found
 ```
+
+![](./fig/README-unnamed-chunk-11-1.png)<!-- -->
 
 ## Notes
 

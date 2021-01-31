@@ -4,8 +4,14 @@
 \alias{BMIR_sampler}
 \title{The Bayesian Muliple Instance Regression model}
 \usage{
-BMIR_sampler(ntotal = 1e+05, nwarm = ntotal/2, nthin = 1,
-  nchain = 1, tidydata, return_delta = FALSE)
+BMIR_sampler(
+  ntotal = 1e+05,
+  nwarm = ntotal/2,
+  nthin = 1,
+  nchain = 1,
+  tidydata,
+  return_delta = FALSE
+)
 }
 \arguments{
 \item{ntotal}{Total number of samplings. Default is \code{100000}.}

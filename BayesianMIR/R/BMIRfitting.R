@@ -168,7 +168,7 @@ BMIR_sampler <- function(ntotal = 100000,
   parlist <- getPar(tidydata)
   
   cat("=============================================================\n")
-  cat(sprintf("Multiple Instance Bayesian Regression\n"))
+  cat(sprintf("Bayesian Multiple Instance Regression\n"))
   res_mcmc <- vector("list", nchain)
   pip <- c()
   for(nc in 1:nchain){

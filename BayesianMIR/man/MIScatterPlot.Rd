@@ -4,8 +4,7 @@
 \alias{MIScatterPlot}
 \title{Scatter Plot for Multiple Instance Regression}
 \usage{
-MIScatterPlot(tidydata, bag_size, true_primary = NULL,
-  pred_primary = NULL)
+MIScatterPlot(tidydata, bag_size, true_primary = NULL, pred_primary = NULL)
 }
 \arguments{
 \item{tidydata}{A list created from \code{\link{Tidy_dataset}}.}
